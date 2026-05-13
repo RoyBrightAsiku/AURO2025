@@ -1,0 +1,55 @@
+services:
+  auro-wsl:
+    image: ghcr.io/uoy-robostar/ros2-tb3/auro-dev:latest
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    depends_on:
+      mongo-gpig-audit:
+        condition: service_healthy
+    devices:
+      - /dev/dxg:/dev/dxg
+    network_mode: service:mongo-gpig-audit
+    volumes:
+      - type: bind
+        source: /usr/lib/wsl
+        target: /usr/lib/wsl
+        read_only: true
+      - type: bind
+        source: /run/desktop/mnt/host/wslg
+        target: /mnt/wslg
+        read_only: true
+      - type: bind
+        source: /run/desktop/mnt/host/wslg/.X11-unix
+        target: /tmp/.X11-unix
+        read_only: true
+    environment:
+      LD_LIBRARY_PATH: /usr/lib/wsl/lib
+      WAYLAND_DISPLAY: wayland-0
+      DISPLAY: ":0"
+      PULSE_SERVER: /mnt/wslg/PulseServer
+      GALLIUM_DRIVER: d3d12
+      GPIG_TEAM_A_REPO: "https://github.com/rs-sandhu/gpig-team-a.git"
+      GPIG_TEAM_A_REF: main
+      DEFAULT_MONGO_URI: "mongodb://gpig:gpig@localhost:27017/?authSource=admin"
+      DEFAULT_MONGO_DB_NAME: gpig_audit
+
+  mongo-gpig-audit:
+    image: mongo:8.0
+    container_name: mongo-gpig-audit
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - gpig-mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: gpig
+      MONGO_INITDB_ROOT_PASSWORD: gpig
+      MONGO_INITDB_DATABASE: gpig_audit
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --quiet --username gpig --password gpig --authenticationDatabase admin --eval 'db.adminCommand({ ping: 1 }).ok' | grep 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+
+volumes:
+  gpig-mongo-data:
