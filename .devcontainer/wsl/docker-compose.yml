@@ -36,8 +36,7 @@ services:
     image: mongo:8.0
     container_name: mongo-gpig-audit
     restart: unless-stopped
-    ports:
-      - "127.0.0.1:27017:27017"
+    # Not published on the Windows host; auro-wsl shares this network and uses localhost:27017.
     volumes:
       - gpig-mongo-data:/data/db
     environment:
