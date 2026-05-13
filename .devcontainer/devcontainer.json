@@ -38,6 +38,6 @@
   "containerEnv": {
     "VNC_RESOLUTION": "1280x720x24",
     "GPIG_TEAM_A_REPO": "https://github.com/rs-sandhu/gpig-team-a.git",
-    "GPIG_TEAM_A_REF": "control-node-v3"
+    "GPIG_TEAM_A_REF": "main"
   }
 }

@@ -5,7 +5,7 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 workspace_dir="$(cd "${script_dir}/.." && pwd)"
 target_dir="${GPIG_TEAM_A_DIR:-${workspace_dir}/gpig-team-a}"
 repo_url="${GPIG_TEAM_A_REPO:-https://github.com/rs-sandhu/gpig-team-a.git}"
-repo_ref="${GPIG_TEAM_A_REF:-control-node-v3}"
+repo_ref="${GPIG_TEAM_A_REF:-main}"
 
 if [ -d "${target_dir}/.git" ]; then
   echo "[gpig] gpig-team-a already exists at ${target_dir}; leaving it untouched."
