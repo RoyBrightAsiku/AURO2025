@@ -34,7 +34,6 @@ services:
 
   mongo-gpig-audit:
     image: mongo:8.0
-    container_name: mongo-gpig-audit
     restart: unless-stopped
     # Not published on the Windows host; auro-wsl shares this network and uses localhost:27017.
     volumes:
